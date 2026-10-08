@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     branches:
-      - '*'
+      - main
 
 jobs:
   build:
@@ -14,17 +14,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
         with:
-          python-version: '3.11'
-      - name: Install the dependencies
+          environment-file: .github/build-environment.yml
+          cache-environment: true
+
+      - name: Build self-contained JupyterLite site
+        shell: bash -l {0}
         run: |
-          python -m pip install -r requirements.txt
-      - name: Build the JupyterLite site
+          jupyter lite build --contents exam-content --output-dir dist
+          test -f dist/lab/index.html
+          test -f dist/notebooks/index.html
+          python scripts/check_dist.py
+
+      - name: Smoke test offline Python packages
+        shell: bash -l {0}
         run: |
-          cp README.md content
-          jupyter lite build --contents content --output-dir dist
+          python -m pip install xnotebook==1.0.0
+          xnb scripts/smoke.py -e environment.yml --timeout 300 --cell-timeout 180
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
