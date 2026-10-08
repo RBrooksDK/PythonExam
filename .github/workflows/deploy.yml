@@ -27,6 +27,7 @@ jobs:
           jupyter lite build --contents exam-content --output-dir dist
           test -f dist/lab/index.html
           test -f dist/notebooks/index.html
+          python scripts/check_dist.py
 
       - name: Smoke test offline Python packages
         shell: bash -l {0}
