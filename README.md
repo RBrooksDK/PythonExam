@@ -1,37 +1,35 @@
-# JupyterLite Demo
+# PythonExam
 
-[![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://jupyterlite.github.io/demo)
+JupyterLite for written exams in STA, ALI, and SMP at VIA University College.
 
-JupyterLite deployed as a static site to GitHub Pages, for demo purposes.
+The site is built with the Xeus Python browser kernel. Its Python runtime and selected packages are included in the GitHub Pages output, so normal calculations do not need a package CDN.
 
-## ✨ Try it in your browser ✨
+## Site
 
-➡️ **https://jupyterlite.github.io/demo**
+- JupyterLab: https://rbrooksdk.github.io/PythonExam/lab/index.html
+- Notebook view: https://rbrooksdk.github.io/PythonExam/notebooks/
+- Package check notebook: `exam-content/Start.ipynb`
 
-![github-pages](https://user-images.githubusercontent.com/591645/120649478-18258400-c47d-11eb-80e5-185e52ff2702.gif)
+## Included Python packages
 
-## Requirements
+- NumPy, SciPy, pandas, and Matplotlib
+- SymPy
+- statsmodels and scikit-learn
+- openpyxl for Excel files
+- Plotly
 
-JupyterLite is being tested against modern web browsers:
+Python's standard library and dependencies of these packages are also included. The build environment is defined in `environment.yml`.
 
-- Firefox 90+
-- Chromium 89+
+These choices follow the current [STA course](https://rbrooksdk.github.io/STA1_26/), [Danish STA course](https://rbrooksdk.github.io/STA_26/), [ALI course](https://rbrooksdk.github.io/ALI1_26/), and [SMP course](https://rbrooksdk.github.io/SMP1_26/). The courses use NumPy, pandas, SciPy, Matplotlib, SymPy, statsmodels, and some examples use scikit-learn, openpyxl, or Plotly.
 
-## Deploy your JupyterLite website on GitHub Pages
+## Build and checks
 
-Check out the guide on the JupyterLite documentation: https://jupyterlite.readthedocs.io/en/latest/quickstart/deploy.html
+GitHub Actions builds and deploys the site from `.github/workflows/deploy.yml`. The workflow checks that the chosen packages and Xeus runtime are bundled and runs `scripts/smoke.py` in a browser Python environment with network access disabled. It also checks that the OpenAI Python package is not preinstalled.
 
-## Further Information and Updates
+Adding a package to `environment.yml` changes the next build. A package's presence in the build does not grant access to an external service.
 
-For more info, keep an eye on the JupyterLite documentation:
+## Exam access
 
-- How-to Guides: https://jupyterlite.readthedocs.io/en/latest/howto/index.html
-- Reference: https://jupyterlite.readthedocs.io/en/latest/reference/index.html
+WISEflow controls access to internet domains, not Python import statements. For an exam using this site, allow the `rbrooksdk.github.io` domain and remove the old `cdn.jsdelivr.net` resource after the new version has been tested inside the lockdown browser. The browser test should cover notebook startup, the package check notebook, any supplied data files, and submission of results.
 
-This template provides the Pyodide kernel (`jupyterlite-pyodide-kernel`), the JavaScript kernel (`jupyterlite-javascript-kernel`), and the p5 kernel (`jupyterlite-p5-kernel`), along with other
-optional utilities and extensions to make the JupyterLite experience more enjoyable. See the
-[`requirements.txt` file](requirements.txt) for a list of all the dependencies provided.
-
-For a template based on the Xeus kernel, see the [`jupyterlite/xeus-python-demo` repository](https://github.com/jupyterlite/xeus-python-demo)
-
-
+This repository is public. Do not put exam questions, solutions, credentials, or API keys in it.
