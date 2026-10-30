@@ -24,12 +24,12 @@ These choices follow the current [STA course](https://rbrooksdk.github.io/STA1_2
 
 ## Build and checks
 
-GitHub Actions builds and deploys the site from `.github/workflows/deploy.yml`. The workflow checks that the chosen packages and Xeus runtime are bundled and runs `scripts/smoke.py` in a browser Python environment with network access disabled. It also checks that the OpenAI Python package is not preinstalled.
+GitHub Actions builds and deploys the site from `.github/workflows/deploy.yml`. The workflow checks that the chosen packages and Xeus runtime are bundled and runs `scripts/smoke.py` in a browser Python environment with network access disabled. It also checks that the OpenAI Python package is not preinstalled. This check is only a tripwire for a later package change that pulls in an AI client as a dependency. It does not block AI services: an AI client is a thin wrapper around HTTP requests, so access depends on the lockdown browser blocking the service's domain (see Exam access).
 
 Adding a package to `environment.yml` changes the next build. A package's presence in the build does not grant access to an external service.
 
 ## Exam access
 
-WISEflow controls access to internet domains, not Python import statements. For an exam using this site, allow the `rbrooksdk.github.io` domain and remove the old `cdn.jsdelivr.net` resource after the new version has been tested inside the lockdown browser. The browser test should cover notebook startup, the package check notebook, any supplied data files, and submission of results.
+WISEflow controls access to internet domains, not Python import statements. For an exam using this site, allow the `rbrooksdk.github.io` domain and remove the old `cdn.jsdelivr.net` resource after the new version has been tested inside the lockdown browser. The browser test should cover notebook startup, the package check notebook, any supplied data files, and submission of results. It should also confirm that `%pip install` and requests to other domains fail. WISEflow grants access to the whole domain of a permitted resource, so all pages on `rbrooksdk.github.io` are reachable during the exam.
 
 This repository is public. Do not put exam questions, solutions, credentials, or API keys in it.
